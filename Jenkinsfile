@@ -25,10 +25,10 @@ node{
 	withCredentials([file(credentialsId: JWT_KEY_CREDS_ID, variables: 'jwt_key_file')]){
 		stage('Deployed Code'){
 			if(isUnix()){
-				rc = sh returnStatus: true, script: "$(toolbelt) force:auth:jwt:grant --clientid $(CONNECTED_APP_CONSUMER_KEY) --username $(HUB_ORG) --jwtkeyfile $(jwt_key_file) --setdefaultdevhubusername --instanceurl $(SFDC_HOST)"
+				rc = sh returnStatus: true, script: "${toolbelt} force:auth:jwt:grant --clientid $(CONNECTED_APP_CONSUMER_KEY) --username $(HUB_ORG) --jwtkeyfile $(jwt_key_file) --setdefaultdevhubusername --instanceurl $(SFDC_HOST)"
 			}
 			else{
-				rc = bat returnStatus: true, script: "\"$(toolbelt)\" force:auth:jwt:grant --clientid $(CONNECTED_APP_CONSUMER_KEY) --username $(HUB_ORG) --jwtkeyfile \"$(jwt_key_file)\" --setdefaultdevhubusername --instanceurl $(SFDC_HOST)"
+				rc = bat returnStatus: true, script: "\"${toolbelt}\" force:auth:jwt:grant --clientid $(CONNECTED_APP_CONSUMER_KEY) --username $(HUB_ORG) --jwtkeyfile \"$(jwt_key_file)\" --setdefaultdevhubusername --instanceurl $(SFDC_HOST)"
 			}
 
 			if(rc != 0){error 'hub org authorization failed'}
@@ -37,10 +37,10 @@ node{
 			
 			// need to pull out assigned username
 			if(isUnix()){
-				rmsg = sh returnStdout: true, script:"$(toolbelt) force:mdapi"deploy -d manifest/. -u $(HUB_ORG)"}
+				rmsg = sh returnStdout: true, script:"${toolbelt} force:mdapi"deploy -d manifest/. -u $(HUB_ORG)"}
 			}
 			else{
-				rmsg = bat returnSdout: true, script: "\"$(toolbelt)\" force:mdapi:deploy -d manifest/. -u $(HUB_ORG)"
+				rmsg = bat returnSdout: true, script: "\"${toolbelt}\" force:mdapi:deploy -d manifest/. -u $(HUB_ORG)"
 			}
 
 			print rmsg
